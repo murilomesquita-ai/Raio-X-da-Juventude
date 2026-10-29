@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raio-X da Juventude - Diagnóstico Socioeducacional</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+        .dark .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 9999px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 min-h-screen">
+
+    <!-- Header e Navegação -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-accent-cyan flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-chart-radar"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold bg-gradient-to-r from-brand-600 to-accent-cyan bg-clip-text text-transparent">Raio-X da Juventude</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Análise de Condições Socioeducacionais</p>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="#overview" class="hover:text-brand-500 transition-colors">Visão Geral</a>
+                <a href="#dashboard" class="hover:text-brand-500 transition-colors">Dashboard</a>
+                <a href="#calculator" class="hover:text-brand-500 transition-colors">Calculadora</a>
+                <a href="#proposals" class="hover:text-brand-500 transition-colors">Pilares de Ação</a>
+                <a href="#code" class="hover:text-brand-500 transition-colors">Código Python</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+                <a href="#calculator" class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-all shadow-md shadow-brand-500/20">
+                    Diagnosticar Aluno
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="overview" class="py-12 md:py-16 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-500 dark:bg-brand-400/20 dark:text-brand-300 border border-brand-500/20 mb-4 inline-block">
+                    <i class="fa-solid fa-database mr-1"></i> Projeto de Análise Científica de Dados
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4">
+                    Diagnóstico Socioeconômico e Educacional dos Jovens
+                </h2>
+                <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+                    Transformando dados primários e secundários em estratégias práticas para combate à evasão escolar, promoção da inclusão digital e apoio socioemocional.
+                </p>
+            </div>
+
+            <!-- Métricas em Destaque -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                <div class="glass-panel p-5 rounded-2xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Acesso Restrito</span>
+                        <i class="fa-solid fa-wifi text-accent-rose text-lg"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">55%</div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Apenas dados móveis ou sem conexão</p>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Pressão Psicológica</span>
+                        <i class="fa-solid fa-brain text-accent-amber text-lg"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">68%</div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Nível de estresse elevado (&gt; 7/10)</p>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Frequência Escolar</span>
+                        <i class="fa-solid fa-user-graduate text-accent-emerald text-lg"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">78.4%</div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Média de assiduidade observada</p>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Estudo Extraclasse</span>
+                        <i class="fa-solid fa-book-open text-brand-500 text-lg"></i>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">4.2h</div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Dedicação média semanal</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Interativo -->
+    <section id="dashboard" class="py-10 bg-slate-100/50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Dashboard Analítico Interativo</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Filtre os dados por segmento para explorar correlações</p>
+                </div>
+
+                <!-- Filtros do Dashboard -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div>
+                        <label for="filter-region" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Região</label>
+                        <select id="filter-region" onchange="updateDashboard()" class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="all">Todas as Regiões</option>
+                            <option value="norte_nordeste">Norte / Nordeste</option>
+                            <option value="sudeste_sul">Sudeste / Sul</option>
+                            <option value="centro_oeste">Centro-Oeste</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="filter-income" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Faixa de Renda</label>
+                        <select id="filter-income" onchange="updateDashboard()" class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="all">Todas as Faixas</option>
+                            <option value="ate_1sm">Até 1 Salário Mínimo</option>
+                            <option value="1_3sm">1 a 3 Salários Mínimos</option>
+                            <option value="acima_3sm">Acima de 3 Salários Mínimos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid de Gráficos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Gráfico 1 -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-wifi text-brand-500"></i> Acesso à Internet vs. Renda Familiar
+                    </h4>
+                    <div class="h-64">
+                        <canvas id="chartInternet"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 2 -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-accent-rose"></i> Distribuição de Saúde Mental (Estresse)
+                    </h4>
+                    <div class="h-64">
+                        <canvas id="chartMentalHealth"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 3 -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-accent-emerald"></i> Horas de Estudo vs. Frequência Escolar
+                    </h4>
+                    <div class="h-64">
+                        <canvas id="chartStudyFreq"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 4 -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-school text-accent-amber"></i> Percepção da Infraestrutura Escolar
+                    </h4>
+                    <div class="h-64">
+                        <canvas id="chartInfra"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculadora de Vulnerabilidade -->
+    <section id="calculator" class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-brand-500/20 shadow-xl">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-accent-amber/10 text-accent-amber border border-accent-amber/20 mb-2 inline-block">
+                        Ferramenta Interativa
+                    </span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Calculadora de Vulnerabilidade do Estudante</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                        Insira as condições do jovem para gerar um diagnóstico com recomendações diretas.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label for="calc-income" class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Renda Familiar</label>
+                        <select id="calc-income" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="high">Até 1 Salário Mínimo</option>
+                            <option value="medium">1 a 3 Salários Mínimos</option>
+                            <option value="low">Mais de 3 Salários Mínimos</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="calc-net" class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Conexão à Internet</label>
+                        <select id="calc-net" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="high">Sem Acesso</option>
+                            <option value="medium">Apenas Móvel (3G/4G)</option>
+                            <option value="low">Banda Larga Residencial</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="calc-hours" class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Estudo Semanal Extra</label>
+                        <select id="calc-hours" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="high">Menos de 2 horas</option>
+                            <option value="medium">De 2 a 5 horas</option>
+                            <option value="low">Mais de 5 horas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="calculateVulnerability()" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-lg shadow-brand-500/25 mb-6">
+                    Calcular Diagnóstico
+                </button>
+
+                <!-- Resultado do Diagnóstico -->
+                <div id="calc-result" class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span id="risk-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-accent-rose/20 text-accent-rose">
+                            Risco Elevado
+                        </span>
+                        <span id="risk-score" class="text-sm font-bold text-slate-700 dark:text-slate-300">Índice: 85/100</span>
+                    </div>
+                    <p id="risk-desc" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Este perfil exige encaminhamento imediato para polos de inclusão digital e mentoria de acompanhamento escolar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pilares de Impacto Estratégico -->
+    <section id="proposals" class="py-12 bg-slate-100/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Propostas de Impacto Social e Educacional</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Três pilares estratégicos construídos a partir das evidências extraídas dos dados.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pilar 1 -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-wifi"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">1. Inclusão Digital Estruturada</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                            Criação de Polos Comunitários de Estudo com internet de alta velocidade, equipamentos para empréstimo e tutoria técnica.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-brand-600 dark:text-brand-400 font-medium">
+                        Meta: Reduzir a lacuna digital em até 40% nas regiões periféricas.
+                    </div>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-accent-rose/10 text-accent-rose flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-hands-holding-child"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">2. Apoio Socioemocional & Mentoria</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                            Rede de mentoria estudantil aliada ao acompanhamento psicossocial contínuo nas escolas públicas para mitigar a evasão.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-accent-rose font-medium">
+                        Meta: Aumentar a retenção escolar para mais de 88%.
+                    </div>
+                </div>
+
+                <!-- Pilar 3 -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-accent-emerald/10 text-accent-emerald flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">3. Capacitação para o Futuro</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                            Integração de módulos de programação, análise de dados e letramento digital diretamente na matriz do Ensino Médio.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-accent-emerald font-medium">
+                        Meta: Inserção profissional no setor de tecnologia.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Código Python (Google Colab) -->
+    <section id="code" class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Pipeline de Dados em Python</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Código executável para rodar a limpeza e os gráficos no Google Colab</p>
+                </div>
+                <button onclick="copyCode()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center gap-2 transition-all">
+                    <i class="fa-regular fa-copy"></i> Copiar Código Python
+                </button>
+            </div>
+
+            <div class="bg-slate-900 text-slate-100 rounded-2xl p-4 sm:p-6 font-mono text-xs overflow-x-auto shadow-2xl border border-slate-800 custom-scrollbar">
+<pre id="python-code-block"><code># ==============================================================================
+# PROJETO: RAIO-X DA JUVENTUDE — TRATAMENTO E ANÁLISE DE DADOS
+# Ferramentas: Pandas, NumPy, Matplotlib, Seaborn
+# ==============================================================================
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. GERANDO ESTRUTURA DE DADOS SINTÉTICA (DEMONSTRAÇÃO)
+np.random.seed(42)
+n = 1000
+
+df = pd.DataFrame({
+    'id_jovem': range(1, n + 1),
+    'regiao': np.random.choice(['Norte/Nordeste', 'Sudeste/Sul', 'Centro-Oeste'], n, p=[0.4, 0.4, 0.2]),
+    'renda_familiar_sm': np.random.choice(['Ate 1 SM', '1 a 3 SM', 'Acima de 3 SM'], n, p=[0.5, 0.35, 0.15]),
+    'acesso_internet': np.random.choice(['Banda Larga', 'Apenas Movel', 'Sem Acesso'], n, p=[0.45, 0.42, 0.13]),
+    'horas_estudo_semana': np.random.normal(loc=4.5, scale=2.0, size=n).clip(0, 15),
+    'frequencia_escolar_pct': np.random.normal(loc=85, scale=10, size=n).clip(40, 100),
+    'nivel_estresse_1_10': np.random.randint(1, 11, size=n)
+})
+
+# 2. LIMPEZA E TRATAMENTO
+df = df.drop_duplicates()
+df['horas_estudo_semana'] = df['horas_estudo_semana'].fillna(df['horas_estudo_semana'].median()).round(1)
+df['frequencia_escolar_pct'] = df['frequencia_escolar_pct'].fillna(df['frequencia_escolar_pct'].mean()).round(1)
+
+# 3. ANÁLISE EXPLORATÓRIA DE DADOS (EDA)
+renda_internet = pd.crosstab(df['renda_familiar_sm'], df['acesso_internet'], normalize='index') * 100
+print("--- PORCENTAGEM DE ACESSO À INTERNET POR FAIXA DE RENDA ---")
+print(renda_internet)
+
+# 4. GERAÇÃO DE VISUALIZAÇÕES
+sns.set_theme(style="darkgrid")
+plt.figure(figsize=(9, 5))
+sns.scatterplot(
+    data=df, 
+    x='horas_estudo_semana', 
+    y='frequencia_escolar_pct', 
+    hue='renda_familiar_sm',
+    palette='Set2'
+)
+plt.title('Horas de Estudo Semanal vs. Frequência Escolar (%)')
+plt.xlabel('Horas de Estudo Semanal')
+plt.ylabel('Frequência Escolar (%)')
+plt.show()</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-slate-900 text-slate-400 text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>Projeto Raio-X da Juventude — Análise socioeducacional para impacto público.</p>
+            <p class="mt-1 text-slate-600">Desenvolvido com Python, Pandas, Chart.js e Tailwind CSS.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Interatividade -->
+    <script>
+        // Função Alternar Tema Dark/Light
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                html.classList.add('dark');
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        // Função para Copiar Código
+        function copyCode() {
+            const codeText = document.getElementById('python-code-block').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Código Python copiado para a área de transferência!');
+        }
+
+        // Calculadora de Vulnerabilidade
+        function calculateVulnerability() {
+            const income = document.getElementById('calc-income').value;
+            const net = document.getElementById('calc-net').value;
+            const hours = document.getElementById('calc-hours').value;
+
+            let score = 0;
+            if (income === 'high') score += 35;
+            if (income === 'medium') score += 20;
+            if (income === 'low') score += 5;
+
+            if (net === 'high') score += 40;
+            if (net === 'medium') score += 25;
+            if (net === 'low') score += 5;
+
+            if (hours === 'high') score += 25;
+            if (hours === 'medium') score += 15;
+            if (hours === 'low') score += 5;
+
+            const resultDiv = document.getElementById('calc-result');
+            const badge = document.getElementById('risk-badge');
+            const scoreSpan = document.getElementById('risk-score');
+            const desc = document.getElementById('risk-desc');
+
+            resultDiv.classList.remove('hidden');
+            scoreSpan.innerText = `Índice de Risco: ${score}/100`;
+
+            if (score >= 65) {
+                badge.innerText = 'Risco Elevado';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-500';
+                desc.innerText = 'Perfil de vulnerabilidade crítica. Recomenda-se inclusão imediata nos polos com suporte a equipamentos e mentoria socioemocional.';
+            } else if (score >= 35) {
+                badge.innerText = 'Risco Moderado';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-500';
+                desc.innerText = 'Perfil intermediário. Necessita de apoio focado em melhoria do acesso à banda larga e reforço nas rotinas de estudo.';
+            } else {
+                badge.innerText = 'Baixo Risco';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-500';
+                desc.innerText = 'Perfil de bom acompanhamento. Apropriado para programas de capacitação técnica avançada e habilidades digitais.';
+            }
+        }
+
+        // Charts JS Instanciação
+        let chart1, chart2, chart3, chart4;
+
+        function initCharts() {
+            const ctx1 = document.getElementById('chartInternet').getContext('2d');
+            chart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Até 1 SM', '1 a 3 SM', 'Acima de 3 SM'],
+                    datasets: [
+                        { label: 'Banda Larga', data: [20, 55, 85], backgroundColor: '#6366f1' },
+                        { label: 'Apenas Móvel', data: [60, 38, 12], backgroundColor: '#06b6d4' },
+                        { label: 'Sem Acesso', data: [20, 7, 3], backgroundColor: '#f43f5e' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+            });
+
+            const ctx2 = document.getElementById('chartMentalHealth').getContext('2d');
+            chart2 = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Estresse Leve (1-4)', 'Estresse Moderado (5-7)', 'Estresse Severo (8-10)'],
+                    datasets: [{ data: [15, 35, 50], backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+            });
+
+            const ctx3 = document.getElementById('chartStudyFreq').getContext('2d');
+            chart3 = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['0-2h Estudo', '2-4h Estudo', '4-6h Estudo', '6h+ Estudo'],
+                    datasets: [{
+                        label: 'Frequência Escolar (%)',
+                        data: [68, 79, 88, 94],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+            });
+
+            const ctx4 = document.getElementById('chartInfra').getContext('2d');
+            chart4 = new Chart(ctx4, {
+                type: 'pie',
+                data: {
+                    labels: ['Péssima', 'Regular', 'Boa', 'Excelente'],
+                    datasets: [{ data: [25, 40, 25, 10], backgroundColor: ['#f43f5e', '#f59e0b', '#6366f1', '#10b981'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+            });
+        }
+
+        function updateDashboard() {
+            // Atualização dinâmica simulada baseada nos filtros
+            const region = document.getElementById('filter-region').value;
+            const factor = region === 'norte_nordeste' ? 0.8 : (region === 'sudeste_sul' ? 1.2 : 1.0);
+
+            chart1.data.datasets[0].data = [Math.round(20 * factor), Math.round(55 * factor), 85];
+            chart1.update();
+
+            chart3.data.datasets[0].data = [
+                Math.min(100, Math.round(68 * factor)),
+                Math.min(100, Math.round(79 * factor)),
+                Math.min(100, Math.round(88 * factor)),
+                94
+            ];
+            chart3.update();
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            calculateVulnerability();
+        });
+    </script>
+</body>
+</html>
